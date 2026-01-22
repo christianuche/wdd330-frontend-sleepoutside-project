@@ -6,4 +6,3 @@ const dataSource = new ProductData("tents");
 
 const productList = new ProductList("tents", dataSource, listElement);
 productList.init();
-
