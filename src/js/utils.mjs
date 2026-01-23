@@ -27,22 +27,29 @@ export function getParam(param) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const product = urlParams.get(param);
-    return product
+    return product;
 }
 
 export function renderListWithTemplate(
-    templateFn,
+    template,
     parentElement,
     list,
     position = "afterbegin",
-    clear = false
+    clear = false,
 ) {
+    const htmlStrings = list.map(template);
+    // if clear is true we need to clear out the contents of the parent.
     if (clear) {
         parentElement.innerHTML = "";
     }
+    parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
 
-    const htmlString = list.map(templateFn);
-    parentElement.insertAdjacentHTML(position, htmlString.join(""));
+export function renderWithTemplate(template, parentElement, data, callback) {
+    parentElement.innerHTML = template;
+    if (callback) {
+        callback(data);
+    }
 }
 
 async function loadTemplate(path) {
@@ -59,39 +66,5 @@ export async function loadHeaderFooter() {
     const footerElement = document.querySelector("#main-footer");
 
     renderWithTemplate(headerTemplate, headerElement);
-    renderWithTemplate(footerTemplate, footerElement);
-}
-
-/* ------------------------------
-   RENDER SINGLE TEMPLATE
---------------------------------*/
-export function renderWithTemplate(template, parentElement, data, callback) {
-    parentElement.innerHTML = template;
-    if (callback) {
-        callback(data);
-    }
-}
-
-/* ------------------------------
-   LOAD TEMPLATE FILE
---------------------------------*/
-export async function loadTemplate(path) {
-    const res = await fetch(path);
-    const template = await res.text();
-    return template;
-}
-
-/* ------------------------------
-   LOAD HEADER & FOOTER
---------------------------------*/
-export async function loadHeaderFooter() {
-    // Load header
-    const headerTemplate = await loadTemplate("../partials/header.html");
-    const headerElement = document.querySelector("#main-header");
-    renderWithTemplate(headerTemplate, headerElement);
-
-    // Load footer
-    const footerTemplate = await loadTemplate("../partial/footer.html");
-    const footerElement = document.querySelector("#main-footer");
     renderWithTemplate(footerTemplate, footerElement);
 }
