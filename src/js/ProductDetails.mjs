@@ -1,11 +1,12 @@
-import { setLocalStorage, getLocalStorage, alertMessage } from "./utils.mjs";
+import { setLocalStorage, getLocalStorage, alertMessage, updateCartCount } from "./utils.mjs";
 
 function productDetailsTemplate(product) {
+    const imageSrc = product.Image || product.Images?.PrimaryLarge || "";
     return `<section class="product-detail"> <h3>${product.Brand.Name}</h3>
     <h2 class="divider">${product.NameWithoutBrand}</h2>
     <img
       class="divider"
-      src="${product.Images.PrimaryLarge}"
+      src="${imageSrc}"
       alt="${product.NameWithoutBrand}"
     />
     <p class="product-card__price">$${product.FinalPrice}</p>
@@ -44,6 +45,7 @@ export default class ProductDetails {
         // then add the current product to the list
         cartContents.push(this.product);
         setLocalStorage("so-cart", cartContents);
+        updateCartCount();
         alertMessage(`${this.product.NameWithoutBrand} added to cart!`);
     }
     renderProductDetails(selector) {
