@@ -14,6 +14,18 @@ export function setLocalStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
+// update cart count in header
+export function updateCartCount() {
+    const cartItems = getLocalStorage("so-cart") || [];
+    const count = cartItems.length;
+    const countElement = document.getElementById("cart-count");
+    if (countElement) {
+        countElement.textContent = count;
+        // Hide the badge if count is 0
+        countElement.style.display = count > 0 ? "flex" : "none";
+    }
+}
+
 // helper to get parameter strings
 export function getParam(param) {
     const queryString = window.location.search;
